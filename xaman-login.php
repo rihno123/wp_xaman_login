@@ -29,7 +29,6 @@ class XamanLoginPlugin {
     public function __construct() {
         $this->initHooks();
         $this->xummSdk = new XummSdk(get_option('XUMM_KEY'), get_option('XUMM_SECRET'));
-        error_log("uspio");
     }
 
     private function initHooks() {
