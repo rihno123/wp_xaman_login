@@ -5,7 +5,7 @@ if(!defined('ABSPATH'))
     die('Nice try!');
 }
 
-function Tokens_list() {
+function Form() {
     ob_start();
     ?>
    <html lang="en">
@@ -149,4 +149,4 @@ function Tokens_list() {
     <?php
     return ob_get_clean();
 }
-add_shortcode('login_form', 'Tokens_list');
+add_shortcode('login_form', 'Form');
