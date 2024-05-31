@@ -27,3 +27,6 @@ If you prefer to use your own form, make sure to use the following IDs:
 
 Alternatively, you can customize the form by editing the `Tokens-list-menu.php` file.
 
+## Note
+
+The plugin is configured to operate on the testnet.
