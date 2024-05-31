@@ -149,4 +149,4 @@ function Tokens_list() {
     <?php
     return ob_get_clean();
 }
-add_shortcode('tokens', 'Tokens_list');
+add_shortcode('login_form', 'Tokens_list');
