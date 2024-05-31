@@ -29,7 +29,7 @@ class XamanLoginPlugin {
         add_action('wp_enqueue_scripts', array($this, 'enqueueCustomScripts'));
         require_once plugin_dir_path(__FILE__) . 'includes/jQuery-handler.php';
         require_once plugin_dir_path(__FILE__) . 'includes/Settings.php';
-        require_once plugin_dir_path(__FILE__) . 'includes/Tokens-list-menu.php';
+        require_once plugin_dir_path(__FILE__) . 'includes/Form.php';
         require_once plugin_dir_path(__FILE__) . 'includes/class-login-handler.php';
         require_once plugin_dir_path(__FILE__) . 'includes/class-Rest-api.php';
     }
