@@ -17,7 +17,10 @@ class login_Handler {
     private $xummSdk;
 
     public function __construct() {
-        $this->xummSdk = new XummSdk(get_option('XUMM_KEY'), get_option('XUMM_SECRET'));
+        if(get_option('XUMM_KEY') && get_option('XUMM_SECRET'))
+        {
+            $this->xummSdk = new XummSdk(get_option('XUMM_KEY'), get_option('XUMM_SECRET'));
+        }
     }
 
     public function enqueueCustomScripts() {
