@@ -1,6 +1,6 @@
 <?php
 function xrpl_token_menu() {
-    add_menu_page('Plugin Settings', 'XRPL login', 'manage_options', 'XRPL-login', 'Plugin_menu', '', 100);
+    add_menu_page('Plugin Settings', 'XAMAN login', 'manage_options', 'XRPL-login', 'Plugin_menu', '', 100);
 }
 
 
@@ -13,11 +13,9 @@ function Plugin_menu() {
     // Check if the user have submitted the settings
     // WordPress will add the "settings-updated" $_GET parameter to the url
     if (isset($_GET['settings-updated'])) {
-        // Add settings saved message with the class of "updated"
         add_settings_error('save_messages', 'save_message', __('Settings Saved', 'settings'), 'updated');
     }
 
-        // Register a new setting for "my_custom_plugin" page
         ?>
         <div class="wrap">
             <h2><?php echo esc_html(get_admin_page_title()); ?></h2>

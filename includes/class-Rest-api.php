@@ -1,8 +1,15 @@
 <?php
 
-class pluginRestAPI {
+if(!defined('ABSPATH'))
+{
+    die('Nice try!');
+}
 
+class Rest_api {
+
+    private $loginHandler;
     public function __construct() {
+        $this->loginHandler = new login_Handler();
         add_action('rest_api_init', array($this, 'register_rest_api'));
     }
     
@@ -15,7 +22,6 @@ class pluginRestAPI {
                 'methods' => 'GET, POST',
                 'callback' => array($this,'handle_rest_api_reqs'),
                 'permission_callback' => '__return_true'
-
             )
         );
 
@@ -23,15 +29,16 @@ class pluginRestAPI {
 
     public function handle_rest_api_reqs($request)
     {
-        global $XamanLoginPlugin;
-        $headers = $request->get_headers();
-        $action = $headers['action'];
-        switch ($action[0]) {
+        $rawData = file_get_contents("php://input");
+        $data = json_decode($rawData, true);
+        $action = $data['action'] ?? 'Not provided';
+
+        switch ($action) {
             case 'login':
 
                 try {
 
-                    $XamanLoginPlugin->login();
+                    $this->loginHandler->login();
 
                 } catch (Exception $e) {
                     $error_message = $e->getMessage();
@@ -43,7 +50,7 @@ class pluginRestAPI {
             case 'checking_transaction':
 
                 try {
-                    $uuid = $headers['uuid'][0];
+                    $uuid = $data['uuid'] ?? 'Not provided';
                     $client = new \GuzzleHttp\Client();
                     $url = "https://xumm.app/api/v1/platform/payload/" . $uuid;
                     $response = $client->request('GET', $url, [
@@ -67,8 +74,8 @@ class pluginRestAPI {
             case 'get_balance':
 
                 try {
-                    $wallet = $headers['wallet'][0];
-                    $balances = $XamanLoginPlugin->fetchBalances($wallet);
+                    $wallet = $data['wallet'] ?? 'Not provided';
+                    $balances = $this->loginHandler->fetchBalances($wallet);
                     $info = json_encode([
                         'balances' => $balances,
                         'wallet' => $wallet
@@ -85,9 +92,9 @@ class pluginRestAPI {
             case 'sendButton':
 
                 try {
-                    $destination = $headers['destination'][0];
-                    $ammount = $headers['amount'][0];
-                    $XamanLoginPlugin->sendRequest($destination,$ammount);
+                    $destination = $data['destination'] ?? 'Not provided';
+                    $amount = (int)$data['amount'] ?? 'Not provided';
+                    $this->loginHandler->sendRequest($destination,$amount);
                 
                     } catch (Exception $e) {
                         $error_message = $e->getMessage();
@@ -101,4 +108,4 @@ class pluginRestAPI {
     }
 }
 
-new pluginRestAPI();
+new Rest_api();

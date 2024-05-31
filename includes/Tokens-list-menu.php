@@ -1,11 +1,18 @@
 <?php
+
+if(!defined('ABSPATH'))
+{
+    die('Nice try!');
+}
+
 function Tokens_list() {
+    ob_start();
     ?>
    <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SMM WALLET</title>
+    <title>WALLET INFO</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <style>
         /* Global styles */
@@ -96,12 +103,16 @@ function Tokens_list() {
             background-color: #1f1f1f;
             color: #fff;
         }
-
+        .loginbutton button {
+            border-radius: 4px;
+            padding: 15px;
+            margin-top: 15px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>SMM WALLET</h1>
+        <h1>WALLET</h1>
         <div class="balance">
             <p>XRP Balance: <span id="xrpBalance">XXX XRP</span></p>
             <p>Wallet Address: <span id="walletAddress">rXXXXXXXXXXXXXX</span></p>
@@ -127,10 +138,15 @@ function Tokens_list() {
             <input type="number" id="amount" placeholder="Enter amount">
             <label for="destination">Destination:</label>
             <input type="text" id="destination" placeholder="Enter destination address">
+
+        </div>
+        <div class = "loginbutton">     
+            <button class="button" id="loginButton">LOGIN</button>
         </div>
     </div>
 </body>
 </html>
     <?php
+    return ob_get_clean();
 }
-add_action('wp_footer', 'Tokens_list');
+add_shortcode('tokens', 'Tokens_list');

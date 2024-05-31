@@ -1,4 +1,10 @@
 <?php
+
+if(!defined('ABSPATH'))
+{
+    die('Nice try!');
+}
+
 function jQuery_Handler()
 {
     ?>
@@ -17,10 +23,12 @@ function jQuery_Handler()
             
             });
 
-        jQuery('#Loginbutton').on("click", function (event) {
+        jQuery('#loginButton').on("click", function (event) {
 
             event.preventDefault(); 
-            var form = { "key": "value" };
+            var form = {
+                "action": "login",
+            };
             form = JSON.stringify(form);
 
             jQuery.ajax({
@@ -30,7 +38,6 @@ function jQuery_Handler()
                 headers: {
                     'X-WP-Nonce': nonce, 
                     "accept": "application/json", 
-                    'action': 'login',
                     "Access-Control-Allow-Origin": "*" 
                 },
                 data: form,
@@ -47,12 +54,17 @@ function jQuery_Handler()
         });
 
         jQuery('#sendButton').on("click", function (event) {
-
-            event.preventDefault(); 
-            var form = { "key": "value" };
-            form = JSON.stringify(form);
+            
             var destination = document.getElementById('destination').value;
             var amount = document.getElementById('amount').value;
+            event.preventDefault(); 
+            var form = {
+                "action": "sendButton",
+                "amount": amount,
+                "destination": destination
+            };
+            form = JSON.stringify(form);
+
             jQuery.ajax({
                 method: 'POST',
                 url: '<?php echo get_rest_url(null, "xaman/login"); ?>',
@@ -60,9 +72,6 @@ function jQuery_Handler()
                 headers: {
                     'X-WP-Nonce': nonce, 
                     "accept": "application/json", 
-                    'action': 'sendButton',
-                    'destination':  destination,
-                    'amount': amount,
                     "Access-Control-Allow-Origin": "*" 
                 },
                 data: form,
@@ -123,7 +132,10 @@ function Xaman_handler()
     function Checking_transaction(uuid)
     {
         var nonce = '<?php echo wp_create_nonce("wp_rest"); ?>'
-        var form = { "key": "value" };
+        var form = {
+                "action": "checking_transaction",
+                "uuid": uuid
+            };
         form = JSON.stringify(form);
         jQuery.ajax({
                 method: 'POST',
@@ -132,8 +144,6 @@ function Xaman_handler()
                 headers: {
                     'X-WP-Nonce': nonce, 
                     "accept": "application/json", 
-                    "uuid": uuid,
-                    'action': 'checking_transaction',
                     "Access-Control-Allow-Origin": "*" 
                 },
                 data: form,
@@ -155,7 +165,10 @@ function Xaman_handler()
 
     function updateBalance(walletAddress) {
         var nonce = '<?php echo wp_create_nonce("wp_rest"); ?>'
-        var form = { "key": "value" };
+        var form = {
+                "action": "get_balance",
+                "wallet": walletAddress
+            };
         form = JSON.stringify(form);
         jQuery.ajax({
             method: 'POST',
@@ -163,8 +176,6 @@ function Xaman_handler()
             headers: {
                 'X-WP-Nonce': nonce,
                 "Content-Type": "application/json",
-                'action': 'get_balance',
-                'wallet': walletAddress,
                 "Access-Control-Allow-Origin": "*" 
             },
             data: form,
@@ -189,6 +200,7 @@ function Xaman_handler()
 
                     
                     $('.buttons').before(allTokensHtml);
+                    $('.loginbutton').remove();
                 }
             },
             error: function(jqXHR, textStatus, errorThrown) {
