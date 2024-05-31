@@ -25,7 +25,7 @@ If you prefer to use your own form, make sure to use the following IDs:
 - **XRP Balance**: `xrpBalance`
 - **Wallet Address**: `walletAddress`
 
-Alternatively, you can customize the form by editing the `Tokens-list-menu.php` file.
+Alternatively, you can customize the form by editing the `Form.php` file.
 
 ## Note
 
