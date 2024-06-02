@@ -69,6 +69,7 @@ function Form() {
             background-color: #ff9642;
         }
         .token {
+            overflow-y: auto;
             padding: 15px;
             margin-bottom: 20px;
             background-color: #333;
@@ -104,6 +105,11 @@ function Form() {
             color: #fff;
         }
         .loginbutton button {
+            border-radius: 4px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+        .logoutbutton button {
             border-radius: 4px;
             padding: 15px;
             margin-top: 15px;

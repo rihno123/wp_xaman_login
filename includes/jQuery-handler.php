@@ -9,21 +9,36 @@ function jQuery_Handler()
 {
     ?>
     <script>   
-        
-    jQuery(document).ready(function ($) {
-        var nonce = '<?php echo wp_create_nonce("wp_rest"); ?>'
+       
+        var storedBalance = getCookie('xrpBalance');
+        var storedWallet = getCookie('walletAddress');
+        var storedTokens = getCookie('allTokens');
 
-        document.getElementById('receiveButton').addEventListener('click', () => {
-            var destination = document.getElementById('destination').value;
-            var amount = document.getElementById('amount').value;
-            var popup = window.open("https://xumm.app/detect/request:" + destination + "?amount=" + amount, 'Popup', 'width=600,height=600');
-                if (!popup) {
-                    alert('Popup blocked by browser');
-                }
+        jQuery(document).ready(function ($) {
             
-            });
+            if (storedWallet && storedBalance) {
+                $('#xrpBalance').text(storedBalance);
+                $('#walletAddress').text(storedWallet);
+                var balances = JSON.parse(storedTokens);
+                var allTokensHtml = storedTokens;
+                $('.balance ~ .token').remove();
+                reconstructTokens(balances);
+                $('.loginbutton').remove();
+                addLogoutButton();
+            }
 
-        jQuery('#loginButton').on("click", function (event) {
+            var nonce = '<?php echo wp_create_nonce("wp_rest"); ?>'
+            document.getElementById('receiveButton').addEventListener('click', () => {
+                var destination = document.getElementById('destination').value;
+                var amount = document.getElementById('amount').value;
+                var popup = window.open("https://xumm.app/detect/request:" + destination + "?amount=" + amount, 'Popup', 'width=600,height=600');
+                    if (!popup) {
+                        alert('Popup blocked by browser');
+                    }
+                
+                });
+
+        $('#loginButton').on("click", function (event) {
 
             event.preventDefault(); 
             var form = {
@@ -31,7 +46,7 @@ function jQuery_Handler()
             };
             form = JSON.stringify(form);
 
-            jQuery.ajax({
+            $.ajax({
                 method: 'POST',
                 url: '<?php echo get_rest_url(null, "xaman/login"); ?>',
                 crossDomain: true, 
@@ -53,7 +68,7 @@ function jQuery_Handler()
             });
         });
 
-        jQuery('#sendButton').on("click", function (event) {
+        $('#sendButton').on("click", function (event) {
             
             var destination = document.getElementById('destination').value;
             var amount = document.getElementById('amount').value;
@@ -65,7 +80,7 @@ function jQuery_Handler()
             };
             form = JSON.stringify(form);
 
-            jQuery.ajax({
+            $.ajax({
                 method: 'POST',
                 url: '<?php echo get_rest_url(null, "xaman/login"); ?>',
                 crossDomain: true, 
@@ -137,7 +152,7 @@ function Xaman_handler()
                 "uuid": uuid
             };
         form = JSON.stringify(form);
-        jQuery.ajax({
+        $.ajax({
                 method: 'POST',
                 url: '<?php echo get_rest_url(null, "xaman/login"); ?>',
                 crossDomain: true, 
@@ -164,6 +179,7 @@ function Xaman_handler()
     }
 
     function updateBalance(walletAddress) {
+       
         var nonce = '<?php echo wp_create_nonce("wp_rest"); ?>'
         var form = {
                 "action": "get_balance",
@@ -198,9 +214,14 @@ function Xaman_handler()
                         }
                     });
 
-                    
                     $('.buttons').before(allTokensHtml);
                     $('.loginbutton').remove();
+
+                    console.log(allTokensHtml);
+                    setCookie('xrpBalance', res.balances["XRP"], 1);
+                    setCookie('walletAddress', shortenedWallet, 1);
+                    setCookie('allTokens', JSON.stringify(res.balances), 1);
+                    addLogoutButton();
                 }
             },
             error: function(jqXHR, textStatus, errorThrown) {
@@ -209,6 +230,64 @@ function Xaman_handler()
                 $('#walletAddress').text('Wallet Address: Failed to load');
             }
         });
+    }
+
+    function reconstructTokens(balances) {
+        var allTokensHtml = '';
+        $.each(balances, function(tokenName, balance) {
+            if (tokenName !== 'XRP') {
+                allTokensHtml += `
+                    <div class="token">
+                        <h3><i class="fas fa-coins"></i> ${tokenName}</h3>
+                        <p>Balance: <span>${balance}</span></p>
+                    </div>
+                `;
+            }
+        });
+        $('.buttons').before(allTokensHtml);
+    }
+
+    function addLogoutButton()
+    {
+        var logoutButtonHtml = `
+        <div class = "logoutbutton">     
+        <button class="button" id="logoutButton">LOGOUT</button>
+        </div>
+        `;
+        $('.amount-container').after(logoutButtonHtml);
+
+
+        $('#logoutButton').on('click', function() {
+
+            setCookie('xrpBalance', '', -1);
+            setCookie('walletAddress', '', -1);
+            setCookie('allTokens', '', -1);
+
+            location.reload();
+        });
+    }
+
+    
+    function setCookie(name, value, days) {
+        var expires = "";
+        if (days) {
+            var date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 1000));
+            expires = "; expires=" + date.toUTCString();
+        }
+        document.cookie = name + "=" + (value || "") + expires + "; path=/";
+    }
+
+
+    function getCookie(name) {
+        var nameEQ = name + "=";
+        var ca = document.cookie.split(';');
+        for(var i=0; i < ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+            if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+        }
+        return null;
     }
 
 
