@@ -18,6 +18,7 @@ That's it! Enjoy using the XAMAN Login.
 If you prefer to use your own form, make sure to use the following IDs:
 
 - **Login Button**: `loginButton`
+- **Logout Button**: `logoutButton`
 - **Send Button**: `sendButton`
 - **Receive Button**: `receiveButton`
 - **Amount Input**: `amount`
