@@ -28,7 +28,6 @@ function Form() {
             line-height: 1.6;
         }
         .container {
-            max-width: 600px;
             margin: 20px auto;
             padding: 20px;
             background-color: #1f1f1f;
@@ -68,19 +67,42 @@ function Form() {
         .button:hover {
             background-color: #ff9642;
         }
-        .token {
+        .button {
+            margin-top: 10px;
+        }
+        .tokens {
+            max-height: 400px;
             overflow-y: auto;
+        }
+        .tokens::-webkit-scrollbar {
+            width: 10px; 
+        }
+        .tokens::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+        }
+        .tokens::-webkit-scrollbar-thumb {
+            background: #888; 
+        }
+        .tokens::-webkit-scrollbar-thumb:hover {
+            background: #555; 
+        }
+        .token {
             padding: 15px;
             margin-bottom: 20px;
             background-color: #333;
             border-radius: 8px;
+            display: flex; 
+            justify-content: space-between;
         }
         .token h3 {
             margin-bottom: 10px;
             color: #ee7600;
+            font-size: 25px;
         }
         .token p {
-            margin-bottom: 5px;
+            font-size: 20px;
+            align-self: center;
+            font-weight: bold;
         }
         .fa-coins {
             margin-right: 5px;
@@ -103,6 +125,16 @@ function Form() {
             border-radius: 4px;
             background-color: #1f1f1f;
             color: #fff;
+            text-align: left;
+        }
+        .amount-container input[type=number]::-webkit-inner-spin-button,
+        .amount-container input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .amount-container input[type=number] {
+            -moz-appearance: textfield; 
         }
         .loginbutton button {
             border-radius: 4px;
@@ -124,19 +156,16 @@ function Form() {
             <p>Wallet Address: <span id="walletAddress">rXXXXXXXXXXXXXX</span></p>
         </div>
         <h2>Your Tokens</h2>
-        <div class="token">
-            <h3><i class="fas fa-coins"></i>Token1</h3>
-            <p>Balance: <span>XXX</span></p>
+        <div class = "tokens">
+            <div class="token">
+                <h3><i class="fas fa-coins"></i>Token1</h3>
+                <p>Balance: <span>XXX</span></p>
+            </div>
+            <div class="token">
+                <h3><i class="fas fa-coins"></i>Token2</h3>
+                <p>Balance: <span>XXX</span></p>
+            </div>
         </div>
-        <div class="token">
-            <h3><i class="fas fa-coins"></i>Token2</h3>
-            <p>Balance: <span>XXX</span></p>
-        </div>
-        <div class = "buttons">     
-            <button class="button" id="sendButton">SEND</button>
-            <button class="button" id="receiveButton">RECEIVE</button>
-        </div>
-
         
         <!-- Amount container -->
         <div class="amount-container">
@@ -144,7 +173,6 @@ function Form() {
             <input type="number" id="amount" placeholder="Enter amount">
             <label for="destination">Destination:</label>
             <input type="text" id="destination" placeholder="Enter destination address">
-
         </div>
         <div class = "loginbutton">     
             <button class="button" id="loginButton">LOGIN</button>

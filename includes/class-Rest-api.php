@@ -93,8 +93,9 @@ class Rest_api {
 
                 try {
                     $destination = $data['destination'] ?? 'Not provided';
+                    $userToken = $data['userToken'] ?? 'Not provided';
                     $amount = (int)$data['amount'] ?? 'Not provided';
-                    $this->loginHandler->sendRequest($destination,$amount);
+                    $this->loginHandler->sendRequest($destination,$amount,$userToken);
                 
                     } catch (Exception $e) {
                         $error_message = $e->getMessage();

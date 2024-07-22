@@ -50,13 +50,15 @@ class login_Handler {
         }
     }
 
-    public function sendRequest($destination, $amount) {
+    public function sendRequest($destination, $amount, $userToken) {
 
         $payload = new Payload( [
             'TransactionType' => 'Payment',
             'Destination' => $destination,
             'Amount' => strval($amount * 1000000)
-        ]);
+        ],
+        $userToken
+        );
     
         try {
             $response = $this->xummSdk->createPayload($payload);
